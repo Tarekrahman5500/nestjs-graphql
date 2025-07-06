@@ -22,9 +22,12 @@ export class Profile {
   @Field()
   @Column({ type: 'varchar' })
   avatar: string;
+  @Field(() => ID)
+  @Column()
+  userId: number; // <-- Explicit foreign key
 
   @Field(() => User)
   @OneToOne(() => User, (user) => user.profile)
   @JoinColumn()
-  user: User;
+  user: Promise<User>;
 }

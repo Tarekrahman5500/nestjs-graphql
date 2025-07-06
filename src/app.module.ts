@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -10,6 +10,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { UserModule } from './user/user.module';
 import { UserResolver } from './user/user.resolver';
 import { join } from 'path';
+import { LoaderModule } from './loader/loader.module';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -42,8 +44,16 @@ import { join } from 'path';
       path: '/graphql',
     }),
     UserModule,
+    LoaderModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UserResolver],
+  providers: [
+    AppService,
+    UserResolver,
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+  ],
 })
 export class AppModule {}

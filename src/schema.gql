@@ -11,6 +11,7 @@ type Tag {
 type Post {
   title: String!
   content: String!
+  userId: ID!
   user: User!
   tags: Tag!
 }
@@ -19,6 +20,7 @@ type Profile {
   id: ID!
   bio: String!
   avatar: String!
+  userId: ID!
   user: User!
 }
 
@@ -32,4 +34,25 @@ type User {
 
 type Query {
   users: [User!]!
+  user(id: Int!): User
+}
+
+type Mutation {
+  userCreate(userCreateInput: UserCreateInputDto!): User
+  updateUser(id: Int!, userUpdateInput: UserUpdateInputDto!): User!
+  userRemove(id: Int!): Boolean!
+}
+
+input UserCreateInputDto {
+  username: String!
+  email: String!
+  bio: String!
+  avatar: String!
+}
+
+input UserUpdateInputDto {
+  username: String
+  email: String
+  bio: String
+  avatar: String
 }

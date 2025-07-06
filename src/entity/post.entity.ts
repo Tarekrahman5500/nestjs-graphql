@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { Tag } from './tag.entity';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 @Entity()
@@ -24,11 +24,14 @@ export class Post {
   @Column({ type: 'varchar' })
   content: string;
 
+  @Field(() => ID)
+  @Column()
+  userId: number; // <-- Explicit foreign key
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.posts)
-  user: User;
+  user: Promise<User>;
   @Field(() => Tag)
   @ManyToMany(() => Tag, (tag) => tag.posts)
   @JoinTable()
-  tags: Tag[];
+  tags: Promise<Tag[]>;
 }
