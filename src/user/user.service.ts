@@ -85,4 +85,10 @@ export class UserService {
     // result.affected tells how many rows were deleted
     return !!result.affected;
   }
+
+  async getUserByEmail(email: string): Promise<User | null> {
+    return await this.userRepository.findOne({
+      where: { email },
+    });
+  }
 }

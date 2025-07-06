@@ -22,12 +22,8 @@ export const environmentSchema = {
     .default('postgres'),
   REDIS_HOST: z.string().nonempty(),
   REDIS_PORT: z.string().regex(/^\d+$/).transform(Number).default('6379'),
-  SESSION_SECRET_KEY: z.string().nonempty(),
-  SESSION_EXPIRE_TIME: z
-    .string()
-    .regex(/^\d+$/)
-    .transform(Number)
-    .default('3600'),
+  JWT_SECRET_KEY: z.string().nonempty(),
+  JIWT_EXPIRE_TIME: z.string().regex(/^\d+$/).transform(Number).default('3600'),
 };
 
 // Parse and validate environment variables

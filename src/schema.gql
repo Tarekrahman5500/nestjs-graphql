@@ -33,15 +33,28 @@ type User {
   posts: [Post!]!
 }
 
+type AuthPayload {
+  userId: Int!
+  role: UserRole!
+  accessToken: String!
+}
+
+"""Roles for users"""
+enum UserRole {
+  ADMIN
+  USER
+}
+
 type Query {
   users: [User!]!
-  user(id: Int!): User
+  user: User
 }
 
 type Mutation {
-  updateUser(id: Int!, userUpdateInput: UserUpdateInputDto!): User!
+  updateUser(userUpdateInput: UserUpdateInputDto!): User!
   userRemove(id: Int!): Boolean!
   signUp(userCreateInput: UserCreateInputDto!): User!
+  signIn(input: SignInDto!): AuthPayload!
 }
 
 input UserUpdateInputDto {
@@ -57,5 +70,10 @@ input UserCreateInputDto {
   email: String!
   bio: String!
   avatar: String!
+  password: String!
+}
+
+input SignInDto {
+  email: String!
   password: String!
 }

@@ -6,7 +6,7 @@ export class AuthPayload {
   @Field(() => Int)
   userId: number;
   @Field(() => UserRole)
-  roles: UserRole;
+  role: UserRole;
   @Field()
   accessToken: string;
 }

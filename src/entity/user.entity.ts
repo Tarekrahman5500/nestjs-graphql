@@ -9,6 +9,7 @@ import { Post } from './post.entity';
 import { Profile } from './profile.entity';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { UserRole } from '../enums/role.enum';
+import { Argon2Hash } from '../types/argon2.types';
 
 @ObjectType()
 @Entity()
@@ -25,7 +26,7 @@ export class User {
   email: string;
   @Field()
   @Column({ type: 'varchar', nullable: true })
-  password: string;
+  password: Argon2Hash;
 
   @Column({
     type: 'enum',
