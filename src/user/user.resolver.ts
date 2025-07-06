@@ -9,11 +9,14 @@ import {
 } from '@nestjs/graphql';
 import { Post, Profile, User } from '../entity';
 import { UserService } from './user.service';
-import { Logger } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { ProfileLoaderService } from '../loader/profile.loader.service';
 import { PostLoaderService } from '../loader/post.loader.service';
-import { UserCreateInputDto } from './dto/user.create.input.dto';
+
 import { UserUpdateInputDto } from './dto/user.update.input.dto';
+import { GqlJwtGuard } from '../auth/guards/gql-jwt-guard/gql-jwt.guard';
+import { CurrentUser } from '../decorators/current-user.decorator';
+import { JwtUser } from '../types/jwt.user';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -30,10 +33,11 @@ export class UserResolver {
     return await this.userService.findAll();
   }
 
+  @UseGuards(GqlJwtGuard)
   @Query(() => User, { name: 'user', nullable: true }) // correct return type
-  async findOne(@Args('id', { type: () => Int }) id: number): Promise<User> {
-    this.logger.log(`Finding user with ID: ${id}`);
-    return await this.userService.findOne(id);
+  async findOne(@CurrentUser() user: JwtUser): Promise<User> {
+    this.logger.log(`Finding user with ID: ${user.userId}`);
+    return await this.userService.findOne(user.userId);
   }
 
   @ResolveField(() => Profile)
@@ -54,12 +58,14 @@ export class UserResolver {
     return await this.userService.create(userCreateInput);
   }*/
 
+  @UseGuards(GqlJwtGuard)
   @Mutation(() => User, { name: 'updateUser' })
   async updateUser(
-    @Args('id', { type: () => Int }) id: number,
+    @CurrentUser() user: JwtUser,
     @Args('userUpdateInput') userUpdateInput: UserUpdateInputDto,
   ): Promise<User> {
-    return this.userService.update(id, userUpdateInput);
+    console.log(user);
+    return this.userService.update(user.userId, userUpdateInput);
   }
 
   @Mutation(() => Boolean, { name: 'userRemove' })
