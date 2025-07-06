@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Profile, User, UserRole } from '../entity';
+import { Profile, User } from '../entity';
 import { Repository } from 'typeorm';
-import { UserCreateInputDto } from './dto/user.create.input.dto';
+
 import { UserUpdateInputDto } from './dto/user.update.input.dto';
 
 @Injectable()
@@ -30,28 +30,17 @@ export class UserService {
   }
 
   // now create a user
-  async create(userData: UserCreateInputDto): Promise<User> {
-    // 1. Create and save user
-    const user = this.userRepository.create({
-      role: UserRole.USER,
-      username: userData.username,
-      email: userData.email,
-    });
+  async create(user: User, profile: Profile): Promise<User> {
+    // Save the user
     const savedUser = await this.userRepository.save(user);
 
-    //   console.log(savedUser);
+    // Attach user reference to profile
+    profile.userId = savedUser.id;
+    profile.user = Promise.resolve(savedUser); // or just `savedUser` if eager
 
-    // 2. Create and save profile with bio and avatar
-    const profile = this.profileRepository.create({
-      bio: userData.bio,
-      avatar: userData.avatar,
-      userId: savedUser.id, // optional but good for batching later
-    });
-    // ✅ Step 3: Set lazy relation AFTER creation
-    profile.user = Promise.resolve(savedUser); // or cast properly if needed
-    // console.log(profile);
+    // Save the profile
     await this.profileRepository.save(profile);
-    // console.log('here');
+
     return savedUser;
   }
 

@@ -22,7 +22,12 @@
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
     "docker:restart": "docker compose restart",
-    "docker:logs": "docker compose logs -f"
+    "docker:logs": "docker compose logs -f",
+    "typeorm": "bun run build && ts-node ./node_modules/typeorm/cli",
+    "migration:run": "bun run build &&  bun typeorm migration:run -d dist/config/typeorm.js",
+    "migration:generate": "bun run build &&  bun typeorm -d dist/config/typeorm.js migration:generate ./src/migrations/$orm",
+    "migration:create": "bun typeorm migration:create ./src/migrations/$orm",
+    "migration:revert": "bun run build && bun typeorm -d dist/config/typeorm.js migration:revert"
   },
   "dependencies": {
     "@faker-js/faker": "^9.9.0",
@@ -33,6 +38,8 @@
     "@nestjs/graphql": "^13.1.0",
     "@nestjs/platform-express": "^11.1.3",
     "@nestjs/typeorm": "^11.0.0",
+    "@types/argon2": "^0.15.4",
+    "argon2": "^0.43.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "dataloader": "^2.2.3",

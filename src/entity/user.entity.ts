@@ -8,11 +8,7 @@ import {
 import { Post } from './post.entity';
 import { Profile } from './profile.entity';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-
-export enum UserRole {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
-}
+import { UserRole } from '../enums/role.enum';
 
 @ObjectType()
 @Entity()
@@ -27,6 +23,9 @@ export class User {
   @Field()
   @Column({ type: 'varchar' })
   email: string;
+  @Field()
+  @Column({ type: 'varchar', nullable: true })
+  password: string;
 
   @Column({
     type: 'enum',

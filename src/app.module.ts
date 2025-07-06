@@ -12,6 +12,7 @@ import { UserResolver } from './user/user.resolver';
 import { join } from 'path';
 import { LoaderModule } from './loader/loader.module';
 import { APP_PIPE } from '@nestjs/core';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { APP_PIPE } from '@nestjs/core';
     }),
     UserModule,
     LoaderModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [

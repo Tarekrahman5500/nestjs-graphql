@@ -28,6 +28,7 @@ type User {
   id: Int!
   username: String!
   email: String!
+  password: String!
   profile: Profile!
   posts: [Post!]!
 }
@@ -38,16 +39,9 @@ type Query {
 }
 
 type Mutation {
-  userCreate(userCreateInput: UserCreateInputDto!): User
   updateUser(id: Int!, userUpdateInput: UserUpdateInputDto!): User!
   userRemove(id: Int!): Boolean!
-}
-
-input UserCreateInputDto {
-  username: String!
-  email: String!
-  bio: String!
-  avatar: String!
+  signUp(userCreateInput: UserCreateInputDto!): User!
 }
 
 input UserUpdateInputDto {
@@ -55,4 +49,13 @@ input UserUpdateInputDto {
   email: String
   bio: String
   avatar: String
+  password: String
+}
+
+input UserCreateInputDto {
+  username: String!
+  email: String!
+  bio: String!
+  avatar: String!
+  password: String!
 }

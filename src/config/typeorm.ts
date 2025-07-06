@@ -2,11 +2,12 @@ import { envVariables } from './env.schema';
 import { registerAs } from '@nestjs/config';
 import { configConstants } from './config.constants';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { DataSource, DataSourceOptions } from 'typeorm';
 
 // TypeORM DataSource configuration
 
 //console.log(envVariables);
-const dataSourceConfig: PostgresConnectionOptions = {
+export const dataSourceConfig: PostgresConnectionOptions = {
   type: 'postgres',
   host: envVariables.DATABASE_HOST,
   port: envVariables.DATABASE_PORT,
@@ -22,4 +23,8 @@ const dataSourceConfig: PostgresConnectionOptions = {
 export default registerAs(
   configConstants.TYPEORM,
   (): PostgresConnectionOptions => dataSourceConfig,
+);
+
+export const connectionSource = new DataSource(
+  dataSourceConfig as DataSourceOptions,
 );

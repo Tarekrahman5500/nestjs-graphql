@@ -47,12 +47,12 @@ export class UserResolver {
   }
 
   // now mutation for creation user
-  @Mutation(() => User, { name: 'userCreate', nullable: true })
+  /*  @Mutation(() => User, { name: 'userCreate', nullable: true })
   async createUser(
     @Args('userCreateInput') userCreateInput: UserCreateInputDto,
   ): Promise<User> {
     return await this.userService.create(userCreateInput);
-  }
+  }*/
 
   @Mutation(() => User, { name: 'updateUser' })
   async updateUser(

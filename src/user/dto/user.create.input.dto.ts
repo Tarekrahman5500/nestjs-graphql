@@ -19,4 +19,9 @@ export class UserCreateInputDto {
   @IsString()
   @Field()
   avatar: string;
+
+  @Field()
+  @IsString()
+  @MinLength(6)
+  password: string;
 }
