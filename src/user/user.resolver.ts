@@ -17,6 +17,9 @@ import { UserUpdateInputDto } from './dto/user.update.input.dto';
 import { GqlJwtGuard } from '../auth/guards/gql-jwt-guard/gql-jwt.guard';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { JwtUser } from '../types/jwt.user';
+import { UserRoles } from '../decorators/user.roles.decorator';
+import { UserRole } from '../enums/role.enum';
+import { AuthWithRoles } from '../auth/guards/roles/user.roles.guard/auth.role.guard';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -28,12 +31,12 @@ export class UserResolver {
     private readonly postsLoader: PostLoaderService,
   ) {}
 
+  @AuthWithRoles(UserRole.USER)
   @Query(() => [User], { name: 'users' }) // correct return type
   async findAll(): Promise<User[]> {
     return await this.userService.findAll();
   }
 
-  @UseGuards(GqlJwtGuard)
   @Query(() => User, { name: 'user', nullable: true }) // correct return type
   async findOne(@CurrentUser() user: JwtUser): Promise<User> {
     this.logger.log(`Finding user with ID: ${user.userId}`);
@@ -58,7 +61,7 @@ export class UserResolver {
     return await this.userService.create(userCreateInput);
   }*/
 
-  @UseGuards(GqlJwtGuard)
+  @UserRoles(UserRole.ADMIN, UserRole.USER)
   @Mutation(() => User, { name: 'updateUser' })
   async updateUser(
     @CurrentUser() user: JwtUser,

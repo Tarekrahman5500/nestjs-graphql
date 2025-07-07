@@ -11,8 +11,9 @@ import { UserModule } from './user/user.module';
 import { UserResolver } from './user/user.resolver';
 import { join } from 'path';
 import { LoaderModule } from './loader/loader.module';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
+import { GqlJwtGuard } from './auth/guards/gql-jwt-guard/gql-jwt.guard';
 
 @Module({
   imports: [
@@ -50,6 +51,10 @@ import { AuthModule } from './auth/auth.module';
   ],
   controllers: [AppController],
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: GqlJwtGuard,
+    },
     AppService,
     UserResolver,
     {
